@@ -12,5 +12,5 @@
 *.tar.gz
 *.rar
 #target files#
-target/
+DemoDemo/target/
 *.iml
