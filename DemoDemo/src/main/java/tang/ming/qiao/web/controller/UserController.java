@@ -71,7 +71,7 @@ public class UserController extends BaseController {
     public Map del(@PathVariable("id") int id) {
         HashMap m = new HashMap();
         try {
-            userService.delete(id);
+            //userService.delete(id);
             m.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();

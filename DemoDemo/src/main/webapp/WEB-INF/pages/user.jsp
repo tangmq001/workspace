@@ -11,6 +11,13 @@
     <title>Title</title>
 </head>
 <body>
-<p>你好啊</p>
+<div>John Resig</div>
+<div class="John">George Martin</div>
+<div>Malcom John Sinclair</div>
+<div>J. Ohn</div>
+<script style="text/javascript" src="/resource/js/jquery-1.12.4.js"></script>
+<script>
+    console.log($("div:contains('John')"))
+</script>
 </body>
 </html>

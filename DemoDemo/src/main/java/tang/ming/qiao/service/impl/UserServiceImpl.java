@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import tang.ming.qiao.domain.User;
-import tang.ming.qiao.mapper.BaseMapper;
+import tang.ming.qiao.domain.UserExample;
 import tang.ming.qiao.mapper.UserMapper;
 import tang.ming.qiao.service.IUserService;
 
@@ -22,11 +22,12 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
-    public void delete(Serializable id) {
-        userMapper.delete(id);
+    public void delete(Integer id) {
+        userMapper.deleteByPrimaryKey(id);
     }
 
     public List<User> getAll() {
-        return userMapper.getAll();
+        UserExample e = new UserExample();
+        return userMapper.selectByExample(e);
     }
 }
