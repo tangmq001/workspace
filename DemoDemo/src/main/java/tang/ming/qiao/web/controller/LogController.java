@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import tang.ming.qiao.mapper.BaseMapper;
+import tang.ming.qiao.utils.SendSMSUtil;
 
 /**
  * @Author:tangmq
@@ -28,4 +28,5 @@ public class LogController extends BaseController {
     public ModelAndView sandSMS(@RequestParam("tel")String tel,@RequestParam(value = "code",required = false) String code){
         return new ModelAndView("log");
     }
+
 }
