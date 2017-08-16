@@ -8,9 +8,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
-import tang.ming.qiao.domain.User;
-import tang.ming.qiao.service.IUserService;
+import tang.ming.qiao.domain.UserInfo;
+import tang.ming.qiao.service.IUserInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,7 +34,7 @@ public class UserCache implements InitializingBean ,DisposableBean{
     @Resource
     private RedisTemplate<String ,String> redisTemplate;
     @Resource
-    private IUserService userService;
+    private IUserInfoService userService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -55,10 +54,10 @@ public class UserCache implements InitializingBean ,DisposableBean{
         public void run() {
             LOGGER.info("------开始刷新缓存------");
             redisTemplate.delete(redisTemplate.keys("USER*"));
-            List<User> list = userService.getAll();
+            List<UserInfo> list = userService.getAll();
             if(list.size()>0){
-                for(User user:list){
-                    redisTemplate.opsForValue().set("USER"+user.getId(), JSON.toJSONString(user));
+                for(UserInfo userInfo:list){
+                    redisTemplate.opsForValue().set("USER"+userInfo.getId(), JSON.toJSONString(userInfo));
                 }
             }
             LOGGER.info("------结束刷新缓存------");

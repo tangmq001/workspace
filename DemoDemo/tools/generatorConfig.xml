@@ -32,7 +32,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成哪些表-->
-        <table tableName="t_user" domainObjectName="User">
+        <table tableName="%">
         </table>
     </context>
 </generatorConfiguration>

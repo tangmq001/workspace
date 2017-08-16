@@ -12,10 +12,13 @@
     <script src="/resource/js/jquery-1.12.4.js"></script>
 </head>
 <body>
-<form action="/user/log" type="post">
-    电话号码:<input type="text" name="tel"></br>
+<form action="/action/login" method="post">
+    用户名:<input type="text" name="username"></br>
+    密码:<input type="text" name="password"></br>
+    <%--电话号码:<input type="text" name="tel"></br>
     验证码:<input type="text" name="SMSCode">
-    <input value="发送验证码" type="submit">
+    <input value="发送验证码" type="submit">--%>
+    <input type="submit" value="登录">
 </form>
 </body>
 </html>

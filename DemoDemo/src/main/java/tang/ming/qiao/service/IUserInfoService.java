@@ -1,7 +1,7 @@
 package tang.ming.qiao.service;
 
 
-import tang.ming.qiao.domain.User;
+import tang.ming.qiao.domain.UserInfo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.List;
  * @Date:2017/7/14
  * @Note:
  */
-public interface IUserService {
-    void delete(Integer id);
+public interface IUserInfoService {
+    void delete(Long id);
 
-    List<User> getAll();
+    List<UserInfo> getAll();
 }

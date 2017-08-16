@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import tang.ming.qiao.domain.User;
-import tang.ming.qiao.service.IUserService;
+import tang.ming.qiao.domain.UserInfo;
+import tang.ming.qiao.service.IUserInfoService;
 
 import java.util.*;
 
@@ -26,7 +25,7 @@ import java.util.*;
 @RequestMapping("/user")
 public class UserController extends BaseController {
     @Autowired
-    private IUserService userService;
+    private IUserInfoService userService;
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping("")
@@ -40,13 +39,13 @@ public class UserController extends BaseController {
     @ResponseBody
     public Map getAll() {
         HashMap m = new HashMap();
-        List<User> list = new ArrayList();
+        List<UserInfo> list = new ArrayList();
         try {
             Set<String> keys = redis.keys("USER*");
             if (keys == null || keys.isEmpty()) {
                 list = userService.getAll();
                 if(list.size()>0){
-                    for(User user:list){
+                    for(UserInfo user:list){
                         redis.opsForValue().set("USER"+user.getId(), JSON.toJSONString(user));
                     }
                 }
@@ -55,7 +54,7 @@ public class UserController extends BaseController {
                 while (iterator.hasNext()){
                     String key=iterator.next();
                     String obj = redis.opsForValue().get(key);
-                    list.add(JSON.parseObject(obj,User.class));
+                    list.add(JSON.parseObject(obj,UserInfo.class));
                 }
             }
             m.put("data", list);
