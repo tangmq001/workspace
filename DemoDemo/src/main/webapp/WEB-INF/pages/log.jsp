@@ -15,7 +15,7 @@
 <form action="/action/login" method="post">
     用户名:<input type="text" name="username" required></br>
     密码:<input type="text" name="password" required></br>
-    是否记住:<input type="checkbox" name="isRemenber"> 是否自动登录:<input type="checkbox" name="isAutoLog"></br>
+    是否记住:<input type="checkbox" name="isRemenber" value="true"> </br>
     <input type="submit" value="登录"></br>
     <a href="/action/forgotPsd">忘记密码</a>
 </form>
