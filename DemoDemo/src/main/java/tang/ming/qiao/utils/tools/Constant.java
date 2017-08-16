@@ -9,7 +9,10 @@ public class Constant {
      * usersession对象key
      */
     public static final String USER_KEY = "user";
-
+    /**
+     * 记住账号key
+     */
+    public static final String REMENBER_KEY="userAccount";
     /**
      * 字段空值
      */

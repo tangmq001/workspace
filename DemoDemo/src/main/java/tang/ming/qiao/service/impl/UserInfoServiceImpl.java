@@ -26,4 +26,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
         UserInfoExample e = new UserInfoExample();
         return userMapper.selectByExample(e);
     }
+
+    @Override
+    public UserInfo selectById(String value) {
+        return userMapper.selectByPrimaryKey(Long.parseLong(value));
+    }
 }

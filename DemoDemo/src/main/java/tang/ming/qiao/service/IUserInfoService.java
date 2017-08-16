@@ -15,4 +15,6 @@ public interface IUserInfoService {
     void delete(Long id);
 
     List<UserInfo> getAll();
+
+    UserInfo selectById(String value);
 }
