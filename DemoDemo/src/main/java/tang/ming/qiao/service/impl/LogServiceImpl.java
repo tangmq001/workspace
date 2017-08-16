@@ -23,10 +23,10 @@ public class LogServiceImpl implements ILogService {
     public UserInfo checkAssign(String username, String password) {
         UserInfoExample e=new UserInfoExample();
         UserInfoExample.Criteria c = e.createCriteria();
-        if(!StringUtils.isNotBlank(username)){
+        if(StringUtils.isNotBlank(username)){
             c.andUserNameEqualTo(username);
         }
-        if(!StringUtils.isNotBlank(username)){
+        if(StringUtils.isNotBlank(username)){
             c.andPasswordEqualTo(password);
         }
         List<UserInfo> userInfos = userInfoMapper.selectByExample(e);

@@ -10,6 +10,7 @@ import tang.ming.qiao.domain.UserInfo;
 import tang.ming.qiao.service.ILogService;
 import tang.ming.qiao.service.impl.LogServiceImpl;
 import tang.ming.qiao.utils.SendSMSUtil;
+import tang.ming.qiao.utils.tools.Constant;
 import tang.ming.qiao.utils.tools.DesUtil;
 import tang.ming.qiao.utils.tools.MD5Utils;
 
@@ -33,18 +34,18 @@ public class LogController extends BaseController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public void logging(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletResponse response) {
+    public void logging(@RequestParam("isRemenber") String isRemenber,@RequestParam("isAutoLog") String isAutoLog,@RequestParam("username") String username, @RequestParam("password") String password, HttpServletResponse response) {
         try {
             UserInfo userInfo = logService.checkAssign(username, password);
             if (userInfo!=null) {
                 //登录用户放到cookie中
-                Cookie cookie = new Cookie("USER",String.valueOf(userInfo.getId()));
+                Cookie cookie = new Cookie(Constant.USER_KEY,String.valueOf(userInfo.getId()));
                 //将cookie 放入response
                 response.addCookie(cookie);
                 //跳转页面
                 response.sendRedirect("/index.jsp");
             }else{
-                response.sendRedirect("/error.jsp");
+                response.sendRedirect("/pages/log.jsp");
             }
         } catch (Exception e) {
             e.printStackTrace();
