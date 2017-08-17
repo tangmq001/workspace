@@ -1,0 +1,185 @@
+#macro(head)
+<div class="header">
+    <div class="header-content">
+        <div class="header-logo">
+            <a href="${rc.contextPath}/index.html"><img src="${rc.contextPath}/new/images/logo2.png" alt=""></a>
+        </div>
+
+        <ul class="header-nav">
+            <li class="header-nav-li class-box">
+                <a href="${rc.contextPath}/action/v2/choice" class="nav-a all-class">全部课程</a>
+                <div class="header-nav-box">
+                    <ul id="header-nav-al">
+                    </ul>
+                    <div class="listul-list" style="display: none">
+                    </div>
+                </div>
+            </li>
+            <li class="header-nav-li"><a href="${rc.contextPath}/action/v2/choice?vType=0" class="nav-a nav-1">微课</a></li>
+            <li class="header-nav-li"><a href="${rc.contextPath}/action/v2/choice?vType=1" class="nav-a nav-2">直播</a></li>
+            <li class="header-nav-li"><a href="${rc.contextPath}/action/v2/choice?type=3" class="nav-a nav-3">讲座</a></li>
+            <li class="header-nav-li"><a href="${rc.contextPath}/action/v2/score/show" class="nav-a nav-4">晒成绩</a></li>
+        </ul>
+
+        <div class="header-so">
+            <input id="searchText" type="text" placeholder="心灵学法/数学/英语">
+            <div class="header-btn"></div>
+        </div>
+        <div class="header-pr">
+        </div>
+        <div style="clear:both"></div>
+    </div>
+</div>
+<script src="${rc.contextPath}/new/js/jquery/jquery-1.12.4.js"></script>
+<script>
+    jQuery.ajax({
+        url: '${rc.contextPath}/action/v2/user/session',
+        success: function (response) {
+            var str = "";
+            if (response.success == true) {
+                str = '<div class="yonghu-img">' +
+                        '<img height="32px" width="32px" style="border-radius:50%" src="' + response.image + '" alt="">' +
+                        '</div>' +
+                        '<span class="yonghu">' + response.userName + '</span>' +
+                        '<div style="clear:both"></div>' +
+                        '<div class="geren-box">' +
+                        '<a href="${rc.contextPath}/action/v2/user/info">个人中心</a>' +
+                        '<a href="${rc.contextPath}/action/v2/user/cart">购物车</a>' +
+                        '<a href="${rc.contextPath}/action/v2/user/logout">退出登录</a>' +
+                        '</div>';
+            } else {
+                str = '<a href="${rc.contextPath}/action/v2/user/log" class="index-login">登录</a>' +
+                        '<a href="${rc.contextPath}/action/v2/user/reg" class="index-reg">注册</a>';
+            }
+            $('.header-pr').append(str);
+
+        }
+    });
+    jQuery.ajax({
+        url: "${rc.contextPath}/action/v2/course/class",
+        type: 'get',
+        async: false,
+        dataType: 'json',
+        success: function (result) {
+            if (result && result.success && result.data && result.data.children.length > 0) {
+                var categories = result.data.children;
+                var nav_template = "";
+                $('#header-nav-al').empty();
+                $('.listul-list').empty();
+                jQuery.each(categories, function (k, clas) {
+                    if (k == 0) {
+                        nav_template += '<li class="menulihover">'
+                                + '<a href="${rc.contextPath}/action/v2/choice?class=' + clas.id + '">' + clas.text + '</a>'
+                                + '</li>';
+                    } else {
+                        nav_template += '<li>'
+                                + '<a href="${rc.contextPath}/action/v2/choice?class=' + clas.id + '">' + clas.text + '</a>'
+                                + '</li>';
+                    }
+
+                    var tempTemplate = '<ul class="nav-li-content">';
+                    jQuery.each(clas.children, function (k, grade) {
+                        var gradeTemplate = '';
+                        gradeTemplate += '<li>'
+                                + '<a href="${rc.contextPath}/action/v2/choice?class=' + clas.id + '&grade=' + grade.id + '">' + grade.text + '</a>';
+                        jQuery.each(grade.children, function (k, course) {
+                            gradeTemplate += '<a href="${rc.contextPath}/action/v2/choice?class=' + clas.id + '&grade=' + grade.id + '&course=' + course.id + '">' + course.text + '</a>';
+                        });
+                        gradeTemplate += '</li>';
+                        tempTemplate += gradeTemplate;
+                    });
+                    tempTemplate += '</ul>';
+                    $('.listul-list').append(tempTemplate);
+                });
+                $('#header-nav-al').append(nav_template);
+            }
+
+            $(function () {
+                $(".class-box").mouseenter(function (event) {
+                    $(".header-nav-box").addClass("nav-hover");
+                    $(".all-class").attr('id', 'nav-ge');
+                });
+                $(".class-box").mouseleave(function (event) {
+                    $(".header-nav-box").removeClass("nav-hover");
+                    $(".all-class").removeAttr('id', 'nav-ge');
+                });
+                $("#header-nav-al li").mouseenter(function () {
+                    $(".listul-list").fadeIn();
+                    $($(".nav-li-content")[0]).css("display", "block").siblings().css("display", "none");
+                    var index = $(this).index("#header-nav-al li");
+                    if (!($(this).hasClass("menulihover") || $(this).hasClass("menuliselected"))) {
+                        $($(".nav-li-content")[index]).css("display", "block").siblings().css("display", "none");
+                    } else {
+                    }
+                    $(this).addClass("menulihover").siblings().removeClass("menulihover");
+                });
+                $(".header-nav-box").mouseleave(function () {
+                    $(".all-class").removeAttr('id', 'nav-ge');
+                    $(".listul-list").fadeOut();
+                    $(".listul").fadeOut();
+                    $("#header-nav-al li").removeClass("menulihover");
+                });
+            });
+
+            $(function () {
+                $(".header-pr").mouseenter(function (event) {
+                    $(".yonghu").addClass("hover-active");
+                    $(".geren-box").css('display', 'block');
+                });
+                $(".header-pr").mouseleave(function (event) {
+                    $(".yonghu").removeClass("hover-active");
+                    $(".geren-box").css('display', 'none');
+                });
+            });
+        }
+    });
+    //点击搜索
+    $(".header-btn ").click(function () {
+        search2();
+    });
+    //点击导航,高亮显示
+    var url = window.location.search;
+    var uurl = window.location.href;
+    var params = parseurl(url);
+    if (params) {
+        if (params['vType'] == 0) {
+            $('.nav-1').attr('id', 'action-nv');
+        } else if (params['type']) {
+            $('.nav-3').attr('id', 'action-nv');
+        } else if (params['vType'] == 1) {
+            $('.nav-2').attr('id', 'action-nv');
+        }
+    } else if (uurl.indexOf('show') > -1) {
+        $('.nav-4').attr('id', 'action-nv');
+    }else if (uurl.indexOf('c2') > -1) {
+        $('.nav-5').attr('id', 'action-nv');
+    }
+    function parseurl(search) {
+        if (search && search.indexOf("?") != -1) {
+            var params = {};
+            var str = search.substr(1);
+            var strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                params[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+            }
+            return params;
+        }
+    }
+    ;
+    window.search2=function () {
+        var val = $("#searchText").val();
+        if (val) {
+            window.location.href = encodeURI("${rc.contextPath}/action/v2/choice?s=" + val);
+        } else {
+            window.location.href = "${rc.contextPath}/action/v2/choice";
+        }
+    }
+    //enter监听
+    $('#searchText').bind('keyup', function (event) {
+        if (event.keyCode == "13") {
+            //回车执行查询
+            search2();
+        }
+    });
+</script>
+#end

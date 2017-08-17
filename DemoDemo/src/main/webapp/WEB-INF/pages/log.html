@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>logain</title>
+</head>
+<body>
+<form id="form" action="${rc.contextPath}/action/login" method="post">
+    <div> 用户名:<input type="text" name="username" value="$!{user1.account}"></div>
+    <div>密码:<input type="text" name="password"></div>
+    <div>是否记住:<input type="checkbox" name="isRemenber" checked="$!{checked}" value="true"></div>
+    <div><input type="submit" value="登录"></div>
+    <div><a href="${rc.contextPath}/action/forgotPsd">忘记密码</a></div>
+</form>
+<script src="${rc.contextPath}/resource/js/jquery/jquery-1.12.4.js"></script>
+<script src="${rc.contextPath}/resource/js/jquery/jquery.form.js"></script>
+<script src="${rc.contextPath}/resource/js/jquery/validate/jquery.validate.js"></script>
+<script src="${rc.contextPath}/resource/js/jquery/validate/localization/messages_zh.js"></script>
+<script src="${rc.contextPath}/resource/js/jquery/validate/additional-methods.js"></script>
+<script>
+    $(function () {
+        $("#form").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 12
+                }
+            },
+            message: {
+                username: {
+                    required: "请输入用户名"
+                },
+                password: {
+                    required: "请输入密码",
+                    minlength: "密码长度不能小于6"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.next('div'));
+            }
+        });
+        jQuery.validator.addMethod("phone", function (value, element) {
+            var tel = /^[0-9]{11}$/;
+            return this.optional(element) || (tel.test(value));
+        }, "请正确填写您的电话号码");
+        jQuery.validator.setDefaults({
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    success: function (data) {
+                        if (data.success) {
+                            window.location.href = rootPath + '/index.html';
+                        } else {
+                            $('form p:first').text("用户名或者密码错误");
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+    })
+
+
+</script>
+</body>
+</html>

@@ -24,7 +24,7 @@ public class LogServiceImpl implements ILogService {
         UserInfoExample e=new UserInfoExample();
         UserInfoExample.Criteria c = e.createCriteria();
         if(StringUtils.isNotBlank(username)){
-            c.andUserNameEqualTo(username);
+            c.andAccountEqualTo(username);
         }
         if(StringUtils.isNotBlank(username)){
             c.andPasswordEqualTo(password);
