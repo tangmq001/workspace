@@ -1,7 +1,9 @@
 package tang.ming.qiao.web.controller;
 
+import com.alibaba.druid.sql.visitor.functions.Lpad;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import tang.ming.qiao.domain.UserInfo;
@@ -132,9 +134,19 @@ public class LogController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "/resetPsd", method = RequestMethod.POST)
+    @ResponseBody
+    public Map forgotPsd(@RequestParam("telephone") String telephone, @RequestParam("newPsd") String newPsd) {
+        try {
+            logService.changePsd(telephone, newPsd);
+            return AjaxResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.fail();
+        }
+    }
     @RequestMapping(value = "/forgotPsd", method = RequestMethod.GET)
     public ModelAndView forgotPsd() {
         return new ModelAndView("forgotPsd");
-
     }
 }

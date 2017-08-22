@@ -19,20 +19,34 @@ import java.util.List;
 public class LogServiceImpl implements ILogService {
     @Resource
     private UserInfoMapper userInfoMapper;
+
     @Override
     public UserInfo checkAssign(String username, String password) {
-        UserInfoExample e=new UserInfoExample();
+        UserInfoExample e = new UserInfoExample();
         UserInfoExample.Criteria c = e.createCriteria();
-        if(StringUtils.isNotBlank(username)){
+        if (StringUtils.isNotBlank(username)) {
             c.andAccountEqualTo(username);
         }
-        if(StringUtils.isNotBlank(username)){
+        if (StringUtils.isNotBlank(username)) {
             c.andPasswordEqualTo(password);
         }
         List<UserInfo> userInfos = userInfoMapper.selectByExample(e);
-        for(UserInfo u:userInfos){
+        for (UserInfo u : userInfos) {
             return u;
         }
         return null;
+    }
+
+    @Override
+    public void changePsd(String tel, String psd) {
+        try {
+            UserInfo userInfo = new UserInfo();
+            userInfo.setPassword(psd);
+            UserInfoExample example = new UserInfoExample();
+            example.createCriteria().andTelephoneEqualTo(tel);
+            userInfoMapper.updateByExampleSelective(userInfo, example);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

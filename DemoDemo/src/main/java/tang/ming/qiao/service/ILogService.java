@@ -15,4 +15,11 @@ public interface ILogService {
      * @return
      */
     UserInfo checkAssign(String username, String password);
+
+    /**
+     * 忘记密码修改
+     * @param tel
+     * @param psd
+     */
+    void changePsd(String tel, String psd);
 }

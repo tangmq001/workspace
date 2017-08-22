@@ -19,7 +19,7 @@
         验证码: <input type="text" name="checkNode" value=""><span><button id="button" type="button">获取验证码</button></span>
     </div>
     <div>
-        <input type="submit" value="提交">
+        <button id="submit" type="button" >提交</button>
     </div>
 </form>
 <script src="${rc.contextPath}/resource/js/jquery/jquery-1.12.4.js"></script>
@@ -29,11 +29,11 @@
     $(function () {
         $("#button").click(function () {
             jQuery.ajax({
-                url: "/action/sendSMS",
+                url: "${rc.contextPath}/action/sendSMS",
                 data: {tel: $("input[name=telephone]").val()},
-                method:'post',
+                method: 'post',
                 success: function (val) {
-                    console.log(val.message)
+                    val = jQuery.parseJSON(val);
                     if (val.success) {
                         $("#button").after("<span>验证码发送成功</span>")
                     } else {
@@ -41,7 +41,28 @@
                     }
                 }
             })
-        })
+        });
+        $("#submit").click(function () {
+            var data={};
+            var form=$("form").serializeArray();
+            jQuery.each(form,function () {
+                data[this.name]=this.value;
+            });
+            jQuery.ajax({
+                url: '${rc.contextPath}/action/resetPsd',
+                dataType: 'json',
+                method:'post',
+                data:data,
+                success: function (val) {
+                    if (val.success) {
+//                    window.location.href="/log.html";
+                    } else {
+
+                    }
+                }
+            });
+        });
+
     })
 </script>
 </body>
