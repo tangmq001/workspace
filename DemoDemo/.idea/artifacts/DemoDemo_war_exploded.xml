@@ -56,6 +56,7 @@
           <element id="library" level="project" name="Maven: org.slf4j:jcl-over-slf4j:1.7.22" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.23" />
           <element id="library" level="project" name="Maven: javax.persistence:persistence-api:1.0" />
+          <element id="library" level="project" name="Maven: com.taobao:taobao-sdk:20160607" />
         </element>
       </element>
       <element id="directory" name="META-INF">

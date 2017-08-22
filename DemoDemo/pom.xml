@@ -140,6 +140,12 @@
             <artifactId>persistence-api</artifactId>
             <version>1.0</version>
         </dependency>
+        <!--验证码-->
+        <dependency>
+            <groupId>com.taobao</groupId>
+            <artifactId>taobao-sdk</artifactId>
+            <version>20160607</version>
+        </dependency>
     </dependencies>
 
     <!-- 项目构建相关的配置 -->

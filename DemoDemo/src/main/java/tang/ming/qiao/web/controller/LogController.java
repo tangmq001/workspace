@@ -6,18 +6,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import tang.ming.qiao.domain.UserInfo;
 import tang.ming.qiao.service.ILogService;
+import tang.ming.qiao.service.ISendSMSService;
 import tang.ming.qiao.service.IUserInfoService;
 import tang.ming.qiao.service.impl.LogServiceImpl;
 import tang.ming.qiao.utils.SendSMSUtil;
-import tang.ming.qiao.utils.tools.AjaxResult;
-import tang.ming.qiao.utils.tools.Constant;
-import tang.ming.qiao.utils.tools.DesUtil;
-import tang.ming.qiao.utils.tools.MD5Utils;
+import tang.ming.qiao.utils.tools.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**
@@ -31,6 +30,10 @@ public class LogController extends BaseController {
     private ILogService logService;
     @Resource
     private IUserInfoService userInfo;
+    @Resource
+    private ISendSMSService sendSMSService;
+    //@Resource
+    //private BizConfig bizConfig;
 
     @RequestMapping(value = "/log", method = RequestMethod.GET)
     public ModelAndView log(HttpServletRequest request) {
@@ -77,9 +80,56 @@ public class LogController extends BaseController {
         return AjaxResult.fail();
     }
 
+    /**
+     * 发送验证码
+     *
+     * @param tel
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/sendSMS", method = RequestMethod.POST)
-    public ModelAndView sandSMS(@RequestParam("tel") String tel, @RequestParam(value = "code", required = false) String code) {
-        return new ModelAndView("log");
+    @ResponseBody
+    public Map sendSMS(@RequestParam("tel") String tel, HttpServletResponse response) {
+        try {
+            String sign = new String("丹秋在线".getBytes("ISO8859-1"), "utf-8");
+            String s = sendSMSService.sendValCode(tel, sign, "SMS_69875374");
+            if ("-1".equals(s)) {
+                return AjaxResult.fail();
+            } else {
+                Cookie cookie = new Cookie("SMSCODE", s);
+                response.addCookie(cookie);
+                return AjaxResult.success();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return AjaxResult.fail();
+        }
+    }
+
+    /**
+     * 验证验证码
+     *
+     * @param
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/checkSMS", method = RequestMethod.POST)
+    @ResponseBody
+    public Map sendSMS(@RequestParam("code") String code, HttpServletRequest request) {
+        try {
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("SMSCODE")) {
+                    if (code.equals(cookie.getValue())) {
+                        return AjaxResult.success();
+                    }
+                }
+            }
+            return AjaxResult.fail();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.fail(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/forgotPsd", method = RequestMethod.GET)

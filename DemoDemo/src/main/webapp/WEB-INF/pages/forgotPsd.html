@@ -7,7 +7,7 @@
 <body>
 <form>
     <div>
-        电话号码: <input type="text" name="telephone" value="" >
+        电话号码: <input type="text" name="telephone" value="">
     </div>
     <div>
         新密码: <input type="text" name="newPsd" value="">
@@ -26,7 +26,23 @@
 <script src="${rc.contextPath}/resource/js/jquery/validate/jquery.validate.js"></script>
 <script src="${rc.contextPath}/resource/js/jquery/validate/localization/messages_zh.js"></script>
 <script>
-
+    $(function () {
+        $("#button").click(function () {
+            jQuery.ajax({
+                url: "/action/sendSMS",
+                data: {tel: $("input[name=telephone]").val()},
+                method:'post',
+                success: function (val) {
+                    console.log(val.message)
+                    if (val.success) {
+                        $("#button").after("<span>验证码发送成功</span>")
+                    } else {
+                        $("#button").after("<span>验证码发送失败</span>")
+                    }
+                }
+            })
+        })
+    })
 </script>
 </body>
 </html>
